@@ -2,28 +2,39 @@
 
 import { Button } from "@/components/ui/button"
 import axios from "axios";
-import {Api, TelegramClient} from 'telegram';
-import {StringSession} from 'telegram/sessions';
-
+import { Copy, TriangleAlert } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
 
+  const [link,setLink] = useState("")
+
   let text = "Оплата прошла успешно!"
+  let textLink = "Данная ссылка работает лишь единожды"
+
+  useEffect(() => {
+    handleClick()
+  }, []);
 
   const handleClick = async() => {
     const res = await axios.post("https://api.telegram.org/bot6614162088:AAFrNyUhVtCb0GN6EjfFuGlwlflPmh0vjEM/createChatInviteLink",{"chat_id": "-1002117516354","member_limit":1})
-    console.log(res["data"]["result"]["invite_link"])
+    setLink(res["data"]["result"]["invite_link"])
   } 
 
   return (
-    <div className="flex justify-center bg-zinc-900 h-screen overflow-hidden">
-      <div className="flex flex-col h-screen w-screen text-left p-6 lg:max-w-[1000px]">
-        <div className="bg-zinc-800 rounded-2xl p-4">
+    <div className="flex justify-center bg-zinc-900 h-screen w-screen pt-6 overflow-hidden">
+      <div className="flex flex-col text-left w-[95%] lg:max-w-[1000px]">
           <p className="font-semibold text-sm text-white/60">{`Success)`}</p>
           <p className="text-white font-bold text-3xl ">{text}</p>
-        </div>
-        <div className="text-center self-center mt-[10%] w-screen h-screen lg:max-w-[1000px]">
-          <Button onClick={handleClick} className="w-[80%] h-[7%] bg-sky-500 text-white font-bold text-lg" size="lg" variant="secondary">Join channel</Button>
+        <div className="bg-zinc-800 rounded-2xl p-4 mt-10 text-center">
+          <div className="flex justify-center gap-x-2">
+            <Button onClick={() => {navigator.clipboard.writeText(link)}} className="whitespace-normal" variant="link"><p className="text-white font-bold text-lg text-wrap lg:text-3xl">{link}</p></Button>
+          </div>
+          <div className="flex justify-center gap-x-2 items-center font-semibold text-sm text-white/60 mt-4">
+            <TriangleAlert className="h-4 w-4"/>
+            <p>{textLink}</p>
+            <TriangleAlert className="h-4 w-4"/>
+          </div>
         </div>
       </div>
     </div>
