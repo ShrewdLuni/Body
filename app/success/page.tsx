@@ -17,7 +17,6 @@ export default function Home() {
   }, []);
 
   const handleClick = async() => {
-    const res = await axios.post("https://api.telegram.org/bot6614162088:AAFrNyUhVtCb0GN6EjfFuGlwlflPmh0vjEM/createChatInviteLink",{"chat_id": "-1002117516354","member_limit":1})
     setLink(res["data"]["result"]["invite_link"])
   } 
 
